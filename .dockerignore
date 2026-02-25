@@ -1,0 +1,20 @@
+# VCS
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*.egg-info/
+.venv
+venv
+
+# Data & docs (mounted as volumes)
+data/
+docs/
+
+# Node
+node_modules/
+
+# Misc
+.DS_Store

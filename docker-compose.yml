@@ -1,0 +1,98 @@
+name: cliniQAssisst
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/DockerFile
+    env_file:
+      - .env
+    ports:
+      - "8004:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+      ollama:
+        condition: service_started
+    networks:
+      - internal
+    restart: always
+    volumes:
+      - ./data:/workspace/data
+      - ./app:/workspace/app
+
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./docker/postgres/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4:latest 
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    restart: always
+    # Only enable in development
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    networks:
+      - internal
+    restart: always
+
+  ollama:
+      image: ollama/ollama:latest
+      ports:
+        - "11434:11434"
+      volumes:
+        - ./ollama_data:/root/.ollama
+      networks:
+        - internal
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+
+networks:
+  internal:
+
+volumes:
+  ollama_data:
+  pg_data:
+  pgadmin_data:
+  qdrant_data:

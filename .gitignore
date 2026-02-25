@@ -1,0 +1,6 @@
+.env
+/app/rag/data/vectorstore
+/ollama_data
+/pg_data
+/pgadmin_data
+/qdrant_data
