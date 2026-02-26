@@ -5,7 +5,7 @@ from app.rag.prompt import structured_prompt_template
 def answer_question(user_question: str) -> str:
     docs = retriever.invoke(user_question)
     
-    context = "\n\n".join([doc.page_content for doc in docs])
+    context = " ".join([doc.page_content for doc in docs])
     
     formatted_prompt = structured_prompt_template.format(
         context=context,
@@ -20,5 +20,5 @@ def answer_question(user_question: str) -> str:
     # response = llm.generate_content(formatted_prompt) 
     # return response.text
 
-answer = answer_question("Dans l’asthme, quand le salbutamol doit-il être répété toutes les 20 minutes ?")
-print(answer)
+# answer = answer_question("Dans l’asthme, quand le salbutamol doit-il être répété toutes les 20 minutes ?")
+# print(answer)
