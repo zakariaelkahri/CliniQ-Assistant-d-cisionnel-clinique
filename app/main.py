@@ -17,10 +17,10 @@ async def lifespan(app: FastAPI):
 
         await conn.run_sync(Base.metadata.create_all)
     
-    try:
-        await seed_all()
-    except Exception as e:
-        print(f"error during seeding data {e}")
+    # try:
+        # await seed_all()
+    # except Exception as e:
+    #     print(f"error during seeding data {e}")
     
     yield 
 

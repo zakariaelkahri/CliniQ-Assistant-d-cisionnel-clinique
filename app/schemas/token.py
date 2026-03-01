@@ -7,5 +7,5 @@ class Token(BaseModel):
     token_type: str
     
 
-class Tokenplayload(BaseModel):
+class TokenPayload(BaseModel):
     sub: Optional[str] = None
