@@ -87,6 +87,19 @@ services:
               - driver: nvidia
                 count: 1
                 capabilities: [gpu]
+  
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cliniq-front
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - internal
+    restart: unless-stopped
 
 networks:
   internal:

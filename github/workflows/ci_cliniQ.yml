@@ -1,0 +1,10 @@
+name: CI/CD CliniQ
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  name: Build and Test
+  runs-on: ubuntu-latest
+  steps:

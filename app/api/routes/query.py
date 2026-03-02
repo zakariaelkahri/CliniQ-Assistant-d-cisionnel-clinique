@@ -11,8 +11,6 @@ import logging
 
 
 
-# logger = logging.getLogger(__name__)
-
 router = APIRouter()
 
 @router.post("/assistant")
@@ -41,7 +39,6 @@ async def assistant(
             "current_user": current_user,
         }
     except Exception as e:
-        # logger.exception("Error processing chatbot query")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong while processing your question.",
