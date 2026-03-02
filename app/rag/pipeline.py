@@ -5,7 +5,7 @@ from app.rag.prompt import structured_prompt_template
 def answer_question(user_question: str) -> str:
     docs = retriever.invoke(user_question)
     
-    context = " ".join([doc.page_content for doc in docs])
+    context = "\n\n".join([doc.page_content for doc in docs])
     
     formatted_prompt = structured_prompt_template.format(
         context=context,

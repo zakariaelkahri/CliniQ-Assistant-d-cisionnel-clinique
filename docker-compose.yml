@@ -45,7 +45,7 @@ services:
     restart: always
 
   pgadmin:
-    image: dpage/pgadmin4:latest 
+    image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@example.com}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
@@ -73,21 +73,21 @@ services:
     restart: always
 
   ollama:
-      image: ollama/ollama:latest
-      ports:
-        - "11434:11434"
-      volumes:
-        - ./ollama_data:/root/.ollama
-      networks:
-        - internal
-      deploy:
-        resources:
-          reservations:
-            devices:
-              - driver: nvidia
-                count: 1
-                capabilities: [gpu]
-  
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+    networks:
+      - internal
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
   front:
     build:
       context: ./frontend
@@ -101,6 +101,23 @@ services:
       - internal
     restart: unless-stopped
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: cliniq-mlflow
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+    command: >
+      mlflow server
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+      --host 0.0.0.0
+      --port 5000
+    volumes:
+      - mlflow_data:/mlflow
+    networks:
+      - internal
+    restart: always
+
 networks:
   internal:
 
@@ -109,3 +126,4 @@ volumes:
   pg_data:
   pgadmin_data:
   qdrant_data:
+  mlflow_data:

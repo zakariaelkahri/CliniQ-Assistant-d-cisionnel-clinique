@@ -15,3 +15,4 @@ documents = [
 embeddings = HuggingFaceEmbeddings(
     model_name=settings.EMBEDDING_MODEL
 )
+

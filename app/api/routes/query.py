@@ -28,7 +28,7 @@ async def assistant(
             question = question,
             response = answer
         )
-        
+            
         db.add(new_query)
         await db.commit()
         await db.refresh(new_query)

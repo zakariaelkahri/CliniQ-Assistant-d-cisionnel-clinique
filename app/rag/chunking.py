@@ -2,10 +2,12 @@ from langchain_text_splitters import (
     MarkdownHeaderTextSplitter,
     RecursiveCharacterTextSplitter
 )
+from app.rag.loader import docs
+
 
 def hybrid_chunk(text):
 
-
+    print("Starting hybrid chunking process...")
     md_splitter = MarkdownHeaderTextSplitter([
         ("#", "Chapter"),
         ("##", "Section"),
@@ -14,7 +16,6 @@ def hybrid_chunk(text):
     
     structured_docs = md_splitter.split_text(text)
 
-  
     recursive_splitter = RecursiveCharacterTextSplitter(
         chunk_size=800,
         chunk_overlap=150,
@@ -31,6 +32,6 @@ def hybrid_chunk(text):
                 "content": chunk,
                 "metadata": doc.metadata
             })
+    
 
     return final_chunks
-
