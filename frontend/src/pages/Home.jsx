@@ -1,12 +1,8 @@
-import React from 'react';
+import React from 'react'
+import Assistant from '../components/Assistant'
 
 const Home = () => {
-    return (
-        <div>
-            <h1>Welcome to CliniQ Assistant</h1>
-            <p>Your go-to solution for clinical queries and assistance.</p>
-        </div>
-    );
-};
+  return <Assistant />
+}
 
-export default Home;
+export default Home
