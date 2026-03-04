@@ -2,12 +2,27 @@ from langchain_text_splitters import (
     MarkdownHeaderTextSplitter,
     RecursiveCharacterTextSplitter
 )
-import mlflow 
-mlflow.set_tracking_uri("http://localhost:5000")
-mlflow
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def _log_to_mlflow(structured_docs_count, final_chunks_count):
+    """Log metrics to MLflow, silently fail if unavailable."""
+    try:
+        import mlflow
+        mlflow.set_tracking_uri("http://mlflow:5000")
+        mlflow.set_experiment("Chunking_Experiment")
+        with mlflow.start_run(run_name="Hybrid_Chunking_Run"):
+            mlflow.log_metric("num_structured_docs", structured_docs_count)
+            mlflow.log_metric("num_final_chunks", final_chunks_count)
+            mlflow.log_param("chunk_size", 800)
+            mlflow.log_param("chunk_overlap", 150)
+    except Exception as e:
+        logger.warning(f"MLflow logging failed: {e}")
+
+
 def hybrid_chunk(text):
-
-
     md_splitter = MarkdownHeaderTextSplitter([
         ("#", "Chapter"),
         ("##", "Section"),
@@ -16,7 +31,6 @@ def hybrid_chunk(text):
     
     structured_docs = md_splitter.split_text(text)
 
-  
     recursive_splitter = RecursiveCharacterTextSplitter(
         chunk_size=800,
         chunk_overlap=150,
@@ -34,5 +48,7 @@ def hybrid_chunk(text):
                 "metadata": doc.metadata
             })
 
-    return final_chunks 
+    _log_to_mlflow(len(structured_docs), len(final_chunks))
+
+    return final_chunks
 
