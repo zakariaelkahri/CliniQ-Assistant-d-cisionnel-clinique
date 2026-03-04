@@ -22,4 +22,6 @@ class Settings(BaseSettings):
     # routes
     API_V1_STR: str = "/api/v1"
 
+
+settings = Settings()
         

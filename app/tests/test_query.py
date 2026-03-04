@@ -40,7 +40,6 @@ def fake_queries_db():
     ]
 
 
-
 def test_signup(fake_user):
     """Simulates POST /auth/signup → returns UserResponse if email is new."""
     email_exists = False

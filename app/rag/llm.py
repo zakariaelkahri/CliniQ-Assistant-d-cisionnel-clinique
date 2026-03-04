@@ -38,4 +38,3 @@ def local_model():
     )
     _log_llm_to_mlflow("mistral-nemo", 0, 4096, "ollama")
     return llm
-

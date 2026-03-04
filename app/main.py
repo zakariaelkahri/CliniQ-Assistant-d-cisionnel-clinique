@@ -34,3 +34,7 @@ app = FastAPI(
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["Authentication"])
 app.include_router(query.router, prefix=f"{settings.API_V1_STR}/query", tags=["Query"])
 
+
+@app.get("/")
+async def root():
+    return {"message": "RAG Lab Support API is running", "status": "healthy"}
