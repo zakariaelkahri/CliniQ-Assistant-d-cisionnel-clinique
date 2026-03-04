@@ -28,7 +28,7 @@ def hybrid_chunk(text):
         ("##", "Section"),
         ("###", "Subsection"),
     ])
-    
+
     structured_docs = md_splitter.split_text(text)
 
     recursive_splitter = RecursiveCharacterTextSplitter(
@@ -36,7 +36,7 @@ def hybrid_chunk(text):
         chunk_overlap=150,
         separators=["\n\n", "\n", ". ", " ", ""],
     )
-    
+
     final_chunks = []
 
     for doc in structured_docs:
@@ -51,4 +51,3 @@ def hybrid_chunk(text):
     _log_to_mlflow(len(structured_docs), len(final_chunks))
 
     return final_chunks
-

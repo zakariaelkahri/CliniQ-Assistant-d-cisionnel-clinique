@@ -160,8 +160,10 @@ def run_evaluation(k: int = 5) -> dict:
             "faithfulness": faithfulness(context, answer, llm),
         }
         results.append(result)
-        logger.info(f"  P@{k}={result['precision_at_k']:.2f}  R@{k}={result['recall_at_k']:.2f}  "
-                     f"Relevance={result['answer_relevance']:.2f}  Faithfulness={result['faithfulness']:.2f}")
+        logger.info(
+            f"  P@{k}={result['precision_at_k']:.2f}  R@{k}={result['recall_at_k']:.2f}  "
+            f"Relevance={result['answer_relevance']:.2f}  Faithfulness={result['faithfulness']:.2f}"
+        )
 
     n = len(results)
     evaluation = {

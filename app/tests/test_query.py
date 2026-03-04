@@ -2,7 +2,6 @@ import pytest
 from datetime import datetime
 
 
-
 @pytest.fixture
 def fake_user():
     """Matches UserResponse schema: id, email, username, role."""
@@ -41,7 +40,6 @@ def fake_queries_db():
     ]
 
 
-# --------------- Auth route tests ---------------
 
 def test_signup(fake_user):
     """Simulates POST /auth/signup → returns UserResponse if email is new."""
@@ -67,7 +65,6 @@ def test_login(fake_token):
     assert result is not None
     assert "access_token" in result
     assert result["token_type"] == "bearer"
-
 
 
 def test_assistant(fake_query):

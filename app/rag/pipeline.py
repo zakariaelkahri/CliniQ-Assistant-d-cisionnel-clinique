@@ -1,5 +1,5 @@
 from app.rag.retriever import retriever
-from app.rag.llm import gamini_model, local_model
+from app.rag.llm import local_model
 from app.rag.prompt import structured_prompt_template
 import time
 import logging
@@ -47,10 +47,3 @@ def answer_question(user_question: str) -> str:
     _log_pipeline_to_mlflow(user_question, len(docs), retrieval_time, llm_time, total_time)
 
     return response.content
-
-    # llm = gamini_model()
-    # response = llm.generate_content(formatted_prompt) 
-    # return response.text
-
-# answer = answer_question("Dans l’asthme, quand le salbutamol doit-il être répété toutes les 20 minutes ?")
-# print(answer)

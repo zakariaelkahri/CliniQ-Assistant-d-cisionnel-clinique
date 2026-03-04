@@ -8,21 +8,21 @@ import random
 
 async def seed_queries(db: AsyncSession) -> list[Query]:
     """Seed queries table with sample data"""
-    
+
     # Check if queries already exist
     result = await db.execute(select(Query).limit(1))
     if result.scalar_one_or_none():
         print("Queries already seeded, skipping...")
         return []
-    
+
     # Get all users
     result = await db.execute(select(User))
     users = result.scalars().all()
-    
+
     if not users:
-        print("⚠ No users found. Please seed users first.")
+        print("No users found. Please seed users first.")
         return []
-    
+
     queries_data = [
         {
             "question": "How do I calibrate the X-Ray machine model RX-2000?",
@@ -73,18 +73,20 @@ async def seed_queries(db: AsyncSession) -> list[Query]:
             "response": "Autoclave service indicators: 1) Temperature or pressure doesn't reach set points. 2) Longer than normal cycle times. 3) Door seal leakage. 4) Unusual noises during operation. 5) Failed Bowie-Dick test. 6) Chamber not drying properly. 7) Error codes on display. Schedule service immediately if any indicator is present."
         }
     ]
-    
+
     queries = []
     base_date = datetime.now() - timedelta(days=30)
-    
+
     for i, query_data in enumerate(queries_data):
         # Randomly assign to users
         user = random.choice(users)
-        
+
         # Create timestamps spread over the last 30 days
-        created_at = base_date + timedelta(days=random.randint(0, 30), 
-                                          hours=random.randint(0, 23))
-        
+        created_at = base_date + timedelta(
+            days=random.randint(0, 30),
+            hours=random.randint(0, 23)
+        )
+
         query = Query(
             user_id=user.id,
             question=query_data["question"],
@@ -93,8 +95,7 @@ async def seed_queries(db: AsyncSession) -> list[Query]:
         )
         db.add(query)
         queries.append(query)
-    
+
     await db.commit()
-    
-    print(f"✓ Seeded {len(queries)} queries")
-    return queries
+
+    print(f"Seeded {len(queries)} queries")

@@ -1,5 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator
-from typing import Optional
+from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
@@ -9,11 +8,12 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    
+
+
 class UserResponse(UserBase):
-    id: int 
+    id: int
     role: str
-    
+
     class Config:
         from_attributes = True
         

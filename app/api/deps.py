@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 from app.db.session import AsyncSessionLocal
 from app.core.config import settings
@@ -19,16 +18,13 @@ credentials_exception = HTTPException(
 
 async def get_db():
     async with AsyncSessionLocal() as session:
-        
         yield session
-       
+
 
 async def get_current_user_id(
     token: str = Depends(oauth2_scheme),
 ):
-
     try:
-        
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = int(payload.get("sub"))
         if user_id is None:

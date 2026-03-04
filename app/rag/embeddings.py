@@ -35,4 +35,3 @@ def _log_embeddings_to_mlflow():
 
 
 _log_embeddings_to_mlflow()
-
