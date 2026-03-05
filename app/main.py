@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from fastapi.responses import Response
 from contextlib import asynccontextmanager
 from app.core.config import settings
+from app.core.metrics import generate_latest, CONTENT_TYPE_LATEST
 from app.api.routes import auth
 from app.api.routes import query
 from app.db.session import engine
@@ -14,12 +16,6 @@ from app.models.query import Query  # noqa
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-
-    # try:
-    #     await seed_all()
-    # except Exception as e:
-    #     print(f"error during seeding data {e}")
-
     yield
 
 
@@ -38,3 +34,10 @@ app.include_router(query.router, prefix=f"{settings.API_V1_STR}/query", tags=["Q
 @app.get("/")
 async def root():
     return {"message": "RAG Lab Support API is running", "status": "healthy"}
+
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint."""
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+

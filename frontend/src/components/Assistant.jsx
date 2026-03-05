@@ -23,14 +23,12 @@ const ChatMessage = ({ message }) => {
 
   return (
     <div
-      className={`flex items-start gap-3 animate-fade-in-up ${
-        isUser ? 'flex-row-reverse' : ''
-      }`}
+      className={`flex items-start gap-3 animate-fade-in-up ${isUser ? 'flex-row-reverse' : ''
+        }`}
     >
       <div
-        className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 ${
-          isUser ? 'bg-sky-600' : 'bg-sky-100'
-        }`}
+        className={`flex items-center justify-center w-8 h-8 rounded-lg shrink-0 ${isUser ? 'bg-sky-600' : 'bg-sky-100'
+          }`}
       >
         {isUser ? (
           <User className="w-4 h-4 text-white" />
@@ -39,11 +37,10 @@ const ChatMessage = ({ message }) => {
         )}
       </div>
       <div
-        className={`max-w-[75%] px-4 py-3 text-sm leading-relaxed ${
-          isUser
-            ? 'bg-sky-600 text-white rounded-2xl rounded-tr-sm'
-            : 'bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-sm'
-        }`}
+        className={`max-w-[75%] px-4 py-3 text-sm leading-relaxed ${isUser
+          ? 'bg-sky-600 text-white rounded-2xl rounded-tr-sm'
+          : 'bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-sm'
+          }`}
       >
         {isUser ? (
           <p>{message.content}</p>
@@ -137,9 +134,9 @@ const Assistant = () => {
             </p>
             <div className="flex flex-wrap gap-2 mt-6 max-w-md justify-center">
               {[
-                'Quel est le protocole pour une hypertension ?',
-                'Comment traiter une infection urinaire ?',
-                'Conduite à tenir devant une douleur thoracique ?',
+                'Pourquoi ne faut-il pas laisser le patient se gratter ?',
+                'Quels signes généraux peuvent apparaître entre 2 et 4 heures en cas d’envenimation sévère ?',
+                'Un patient présente une douleur en décharge électrique après un bain en mer en Polynésie. Quelle est l’étiologie la plus probable ?',
               ].map((suggestion) => (
                 <button
                   key={suggestion}

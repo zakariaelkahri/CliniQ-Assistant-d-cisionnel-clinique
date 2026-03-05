@@ -47,3 +47,6 @@ bcrypt==4.2.0
 
 # MLflow
 mlflow
+
+# Monitoring
+prometheus-client==0.21.0

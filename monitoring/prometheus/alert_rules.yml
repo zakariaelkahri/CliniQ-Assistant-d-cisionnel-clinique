@@ -1,0 +1,98 @@
+groups:
+  - name: rag_latency
+    rules:
+      - alert: RAGHighLatency
+        expr: histogram_quantile(0.95, rate(rag_latency_seconds_bucket[5m])) > 30
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAG pipeline P95 latency above 30s"
+          description: "The 95th percentile of RAG pipeline latency has exceeded 30 seconds for the last 2 minutes."
+
+      - alert: RAGCriticalLatency
+        expr: histogram_quantile(0.95, rate(rag_latency_seconds_bucket[5m])) > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG pipeline P95 latency above 60s"
+          description: "The 95th percentile of RAG pipeline latency has exceeded 60 seconds. Immediate investigation required."
+
+      - alert: LLMHighLatency
+        expr: histogram_quantile(0.95, rate(rag_llm_latency_seconds_bucket[5m])) > 20
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "LLM inference P95 latency above 20s"
+          description: "Ollama LLM inference latency is elevated, potentially affecting user experience."
+
+  # - name: rag_errors
+  #   rules:
+  #     - alert: RAGHighErrorRate
+  #       expr: rate(rag_errors_total[5m]) > 0.1
+  #       for: 2m
+  #       labels:
+  #         severity: warning
+  #       annotations:
+  #         summary: "RAG error rate above 0.1/s"
+  #         description: "The RAG pipeline is producing more than 0.1 errors per second over the last 5 minutes."
+
+  #     - alert: RAGErrorSpike
+  #       expr: increase(rag_errors_total[5m]) > 10
+  #       for: 1m
+  #       labels:
+  #         severity: critical
+  #       annotations:
+  #         summary: "More than 10 RAG errors in 5 minutes"
+  #         description: "A spike of RAG pipeline errors has been detected. Check logs immediately."
+
+  # - name: rag_quality
+  #   rules:
+  #     - alert: RAGNoDocsRetrieved
+  #       expr: rag_retrieved_docs == 0
+  #       for: 1m
+  #       labels:
+  #         severity: critical
+  #       annotations:
+  #         summary: "RAG retriever returning 0 documents"
+  #         description: "The retriever is not returning any documents. The vector store may be empty or unreachable."
+
+  #     - alert: RAGShortAnswers
+  #       expr: rag_answer_length < 50
+  #       for: 5m
+  #       labels:
+  #         severity: warning
+  #       annotations:
+  #         summary: "RAG answers are unusually short (< 50 chars)"
+  #         description: "The LLM is producing very short answers, which may indicate degraded response quality."
+
+  - name: infrastructure
+    rules:
+      - alert: ContainerHighCPU
+        expr: rate(container_cpu_usage_seconds_total{name=~".*api.*|.*ollama.*"}[5m]) * 100 > 80
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container CPU usage above 80%"
+          description: "Container {{ $labels.name }} CPU usage has been above 80% for 3 minutes."
+
+      - alert: ContainerHighMemory
+        expr: container_memory_usage_bytes{name=~".*api.*|.*ollama.*"} / container_spec_memory_limit_bytes * 100 > 85
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container memory usage above 85%"
+          description: "Container {{ $labels.name }} is using more than 85% of its memory limit."
+
+      # - alert: ContainerDown
+      #   expr: up{job="cliniq-api"} == 0
+      #   for: 1m
+      #   labels:
+      #     severity: critical
+      #   annotations:
+      #     summary: "CliniQ API container is down"
+      #     description: "The API container has been unreachable for over 1 minute."

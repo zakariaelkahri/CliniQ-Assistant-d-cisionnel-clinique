@@ -1,8 +1,4 @@
-"""
-RAG Evaluation Module
-Evaluates: Answer Relevance, Faithfulness, Precision@k, Recall@k
-Logs all metrics to MLflow under the RAG_Evaluation experiment.
-"""
+
 
 import json
 import logging
@@ -14,9 +10,7 @@ logger = logging.getLogger(__name__)
 
 MLFLOW_URI = "http://mlflow:5000"
 
-# ──────────────────────────────────────────────
-# Test cases
-# ──────────────────────────────────────────────
+
 
 TEST_CASES = [
     {
@@ -71,10 +65,6 @@ TEST_CASES = [
     }
 ]
 
-
-# ──────────────────────────────────────────────
-# Metric functions
-# ──────────────────────────────────────────────
 
 def precision_at_k(retrieved_docs: list, relevant_snippets: list[str], k: int) -> float:
     """Precision@k = (relevant docs in top-k) / k"""
@@ -135,9 +125,7 @@ def _parse_score(text: str) -> float:
     return 0.0
 
 
-# ──────────────────────────────────────────────
-# Run evaluation
-# ──────────────────────────────────────────────
+
 
 def run_evaluation(k: int = 5) -> dict:
     llm = local_model()
@@ -176,7 +164,6 @@ def run_evaluation(k: int = 5) -> dict:
         "avg_faithfulness": sum(r["faithfulness"] for r in results) / n,
     }
 
-    # Log to MLflow
     try:
         import mlflow
         mlflow.set_tracking_uri(MLFLOW_URI)

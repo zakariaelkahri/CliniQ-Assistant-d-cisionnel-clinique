@@ -22,6 +22,9 @@ services:
     volumes:
       - ./data:/workspace/data
       - ./app:/workspace/app
+    environment:
+      GIT_PYTHON_REFRESH: quiet
+      HF_HUB_DISABLE_TELEMETRY: "1"
 
 
   postgres:
@@ -119,6 +122,57 @@ services:
       - internal
     restart: always
 
+  # ── Monitoring ────────────────────────────────────────────
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cliniq-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=15d"
+    depends_on:
+      - api
+    networks:
+      - internal
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cliniq-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    networks:
+      - internal
+    restart: always
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cliniq-cadvisor
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - internal
+    restart: always
+
 networks:
   internal:
 
@@ -128,3 +182,5 @@ volumes:
   pgadmin_data:
   qdrant_data:
   mlflow_data:
+  prometheus_data:
+  grafana_data:
