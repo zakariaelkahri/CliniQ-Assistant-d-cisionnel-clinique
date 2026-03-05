@@ -1,9 +1,10 @@
+from app.core.config import settings
 from app.rag.embeddings import documents, embeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 
 
-client = QdrantClient(url="http://qdrant:6333")
+client = QdrantClient(url=settings.QDRANT_URL)
 
 try:
     client.delete_collection(collection_name="medical_manual")
@@ -14,6 +15,6 @@ except Exception as e:
 vectorstore = QdrantVectorStore.from_documents(
     documents=documents,
     embedding=embeddings,
-    url="http://qdrant:6333",
+    url=settings.QDRANT_URL,
     collection_name="medical_manual"
 )

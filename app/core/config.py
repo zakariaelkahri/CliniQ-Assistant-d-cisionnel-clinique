@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str
     LLAMA_KEY: str
     GEMINI_KEY: str
+    # Qdrant
+    QDRANT_URL: str = "http://qdrant:6333"
     # db
     DATABASE_URL: str
 

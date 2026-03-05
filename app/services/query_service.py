@@ -5,6 +5,7 @@ from sqlalchemy import select
 
 
 async def display_user_query(db: AsyncSession, user_id: int):
+
     stmt = select(Query).join(Query.user).where(User.id == user_id)
     rslt = await db.execute(stmt)
     queries = rslt.scalars().all()

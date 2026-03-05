@@ -2,7 +2,7 @@
 
 import json
 import logging
-from app.rag.retriever import retriever
+from app.rag.retriever import get_retriever
 from app.rag.llm import local_model
 from app.rag.prompt import structured_prompt_template
 
@@ -132,7 +132,7 @@ def run_evaluation(k: int = 5) -> dict:
         qid, query, relevant = tc["query_id"], tc["query"], tc["relevant_docs"]
         logger.info(f"Evaluating {qid}: {query[:60]}...")
 
-        docs = retriever.invoke(query)
+        docs = get_retriever().invoke(query)
         context = "\n\n".join([d.page_content for d in docs])
         answer = llm.invoke(structured_prompt_template.format(context=context, question=query)).content
 

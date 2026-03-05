@@ -6,6 +6,10 @@ from app.api.deps import get_db, get_current_user_id
 from app.schemas.query import AssistantRequest, QueryResponse
 from app.services.query_service import display_user_query
 from app.core.metrics import http_requests_total
+import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
