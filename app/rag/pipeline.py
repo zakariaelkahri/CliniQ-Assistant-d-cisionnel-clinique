@@ -69,4 +69,3 @@ def answer_question(user_question: str) -> str:
         rag_pipeline_calls_total.inc()
         rag_errors_total.labels(error_type=type(e).__name__).inc()
         raise
-

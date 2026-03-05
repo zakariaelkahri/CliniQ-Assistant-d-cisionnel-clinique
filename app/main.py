@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import Response
 from contextlib import asynccontextmanager
 from app.core.config import settings
-from app.core.metrics import generate_latest, CONTENT_TYPE_LATEST
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from app.api.routes import auth
 from app.api.routes import query
 from app.db.session import engine
@@ -40,4 +40,3 @@ async def root():
 async def metrics():
     """Prometheus metrics endpoint."""
     return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
-

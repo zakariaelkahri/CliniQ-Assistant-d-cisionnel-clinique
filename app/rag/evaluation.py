@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 MLFLOW_URI = "http://mlflow:5000"
 
 
-
 TEST_CASES = [
     {
         "query_id": "q1",
@@ -123,8 +122,6 @@ def _parse_score(text: str) -> float:
         except ValueError:
             continue
     return 0.0
-
-
 
 
 def run_evaluation(k: int = 5) -> dict:
