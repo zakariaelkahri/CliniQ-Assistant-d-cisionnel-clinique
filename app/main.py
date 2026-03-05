@@ -8,8 +8,8 @@ from app.api.routes import query
 from app.db.session import engine
 from app.db.base import Base
 
-from app.models.user import User  # noqa
-from app.models.query import Query  # noqa
+from app.models.user import User
+from app.models.query import Query
 
 
 @asynccontextmanager
